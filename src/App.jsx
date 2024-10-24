@@ -1,49 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, Button, Select, MenuItem, Typography } from '@mui/material';
 
-const useLogger = (scope,logType,message) => {
+const useLogger = (scope, logType, message) => {
   const [consoleOutput, setConsoleOutput] = useState([]);
 
-  useEffect( () => {
-    const currTime = new Date().toLocaleTimeString();
-    let logMessage = `[${scope}] [${currTime}] ${message}` ;
+  const logMessage = () => {
+    if (message) {
+      const currTime = new Date().toLocaleTimeString();
+      const consoleMessage = `[${scope}] [${currTime}] ${message}`;
+      setConsoleOutput((prev) => [...prev, consoleMessage]);
+      console[logType](consoleMessage);
+    } else {
+      alert('please enter message');
+    }
+  };
 
-  {/* render previous one in the array and add a new logmessage*/}
-  setConsoleOutput((prev) => [...prev,logMessage]);
-  
-  console[logType](logMessage);
-
-  }, [scope, logType, message]);
-
-  return consoleOutput;
+  return { consoleOutput, logMessage };
 }
-
-
 
 function App() {
   const [scope, setScope] = useState('');
   const [message, setMessage] = useState('');
   const [logType, setLogType] = useState('log');
 
-  const consoleOutput = useLogger(scope,logType,message);
+  const { consoleOutput, logMessage } = useLogger(scope, logType, message);
 
   const handleSubmit = () => {
-    setScope('');
+    logMessage(); 
+    setScope(''); 
     setMessage('');
-    //alert("SUCCESS");
   }
-
 
   return (
     <Box sx={{ width: '100%', padding: '10px' }}>
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginBottom: '20px' }}>
-        {/* the scope */}
+        {/* Scope input */}
         <TextField
           value={scope}
           onChange={(e) => setScope(e.target.value)}
           placeholder='SCOPE'
         />
-        {/* Log */}
+        {/* Log type selector */}
         <Select
           value={logType}
           onChange={(e) => setLogType(e.target.value)}
@@ -55,20 +52,22 @@ function App() {
         </Select>
         <Button variant="contained" onClick={handleSubmit}>Submit</Button>
       </Box>
-    {/* Message */}
+      
+      {/* Message input */}
       <TextField
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder='Message here'
       />
 
-      <Box sx={{ margintop: '20px',padding: '10px', border: '1px solid black'}}>
+      {/* Display the console output */}
+      <Box sx={{ marginTop: '20px', padding: '10px', border: '1px solid black' }}>
         <Typography>Console</Typography>
         <div>
-          {consoleOutput.map((output,index) => (
-            <h2 key={index}> {output} </h2>
+          {consoleOutput.map((output, index) => (
+            <h2 key={index}>{output}</h2>
           ))}
-        </div>      
+        </div>
       </Box>
     </Box>
   );
