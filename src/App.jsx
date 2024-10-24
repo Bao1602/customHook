@@ -13,23 +13,8 @@ function App() {
 
     {/* render previous one in the array and add a new logmessage*/}
     setConsoleOutput((prev) => [...prev,logMessage]);
-  
-    switch(logType){
-      case 'ERROR':
-        console.error(logMessage);
-        break;
-      case 'DEBUG':
-        console.debug(logMessage);
-        break;
-      case 'LOG':
-        console.log(logMessage);
-        break;
-      case 'WARN':
-        console.warn(logMessage);
-        break;
-      default:
-        console.log('This is coming from useLogger function switch default');
-    }
+    
+    console[logType](logMessage);
   }
 
   const handleSubmit = () => {
@@ -54,10 +39,10 @@ function App() {
           value={logType}
           onChange={(e) => setLogType(e.target.value)}
         >
-          <MenuItem value="ERROR">ERROR</MenuItem>
-          <MenuItem value="WARN">WARN</MenuItem>
-          <MenuItem value="LOG">LOG</MenuItem>
-          <MenuItem value="DEBUG">DEBUG</MenuItem>
+          <MenuItem value="error">ERROR</MenuItem>
+          <MenuItem value="warn">WARN</MenuItem>
+          <MenuItem value="log">LOG</MenuItem>
+          <MenuItem value="debug">DEBUG</MenuItem>
         </Select>
         <Button variant="contained" onClick={handleSubmit}>Submit</Button>
       </Box>
@@ -71,8 +56,8 @@ function App() {
       <Box sx={{ margintop: '20px',padding: '10px', border: '1px solid black'}}>
         <Typography>Console</Typography>
         <div>
-          {consoleOutput.map((output) => (
-            <h2 > {output} </h2>
+          {consoleOutput.map((output,index) => (
+            <h2 key={index}> {output} </h2>
           ))}
         </div>      
       </Box>
