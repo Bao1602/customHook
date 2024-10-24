@@ -4,7 +4,7 @@ import { Box, TextField, Button, Select, MenuItem, Typography } from '@mui/mater
 function App() {
   const [scope, setScope] = useState('');
   const [message, setMessage] = useState('');
-  const [logType, setLogType] = useState('LOG');
+  const [logType, setLogType] = useState('log');
   const [consoleOutput, setConsoleOutput] = useState([]);
 
   const useLogger = (scope,logType,message) => {
