@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Select, MenuItem, Typography } from '@mui/material';
+
+const useLogger = (scope,logType,message) => {
+  const [consoleOutput, setConsoleOutput] = useState([]);
+
+  useEffect( () => {
+    const currTime = new Date().toLocaleTimeString();
+    let logMessage = `[${scope}] [${currTime}] ${message}` ;
+
+  {/* render previous one in the array and add a new logmessage*/}
+  setConsoleOutput((prev) => [...prev,logMessage]);
+  
+  console[logType](logMessage);
+
+  }, [scope, logType, message]);
+
+  return consoleOutput;
+}
+
+
 
 function App() {
   const [scope, setScope] = useState('');
   const [message, setMessage] = useState('');
   const [logType, setLogType] = useState('log');
-  const [consoleOutput, setConsoleOutput] = useState([]);
 
-  const useLogger = (scope,logType,message) => {
-    const currTime = new Date().toLocaleTimeString();
-    let logMessage = `[${scope}] [${currTime}] ${message}` ;
-
-    {/* render previous one in the array and add a new logmessage*/}
-    setConsoleOutput((prev) => [...prev,logMessage]);
-    
-    console[logType](logMessage);
-  }
+  const consoleOutput = useLogger(scope,logType,message);
 
   const handleSubmit = () => {
-    useLogger(scope,logType,message);
     setScope('');
     setMessage('');
     //alert("SUCCESS");
